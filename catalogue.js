@@ -53,6 +53,37 @@ const catalogue = [
   {"sku":"S461","brand":"Portwest / Huski","category":"Jackets","name":"Hi-Vis Breathable Jacket","image":"https://workweargurus.com/cdn/shop/products/Portwest-S461-Hi-Vis-Breathable-Jacket-Yellow-1.jpg?v=1686867712","source":"https://workweargurus.com/collections/winter-jackets/products/portwest-s461-hi-vis-breathable-jacket"},
 ];
 
+const guidePrices = {
+  "3101": 71.95,
+  "3102": 61.95,
+  "3305": 29.95,
+  "3316": 42.95,
+  "3319": 50.95,
+  "3356": 47.95,
+  "3511": 29.95,
+  "3518": 35.95,
+  "3712": 26.95,
+  "3817": 27.95,
+  "3851": 66.95,
+  "3852": 65.95,
+  "WSL503": 31.95,
+  "H440": 29.85,
+  "WS3029": 22.95,
+  "WS4247": 25.95,
+  "WSP201": 11.95,
+  "WSL501": 32.95,
+  "WS6030": 29.75,
+  "WS4001": 33.95,
+  "WS3222": 31.75,
+  "K4039": 107.95,
+  "WS6011": 33.85,
+  "K8044": 123.95,
+  "WS6067": 26.75,
+  "C470": 6.95,
+  "WS4132": 31.95
+};
+const aud = new Intl.NumberFormat('en-AU', {style:'currency', currency:'AUD', currencyDisplay:'narrowSymbol'});
+
 const byId = (id) => document.getElementById(id);
 const quote = new Map();
 const storageKey = 'crewkit-quote-v1';
@@ -120,7 +151,9 @@ function renderCatalogue() {
     photo.addEventListener('error', () => photo.remove());
     photo.src = product.image;
     card.append(photo);
-    card.append(element('p', `${product.brand} · ${product.sku}`), element('h3', product.name), source, button);
+    const price = guidePrices[product.sku];
+    const priceLabel = element('strong', price === undefined ? 'Price on request' : `A${aud.format(price)} guide price`);
+    card.append(element('p', `${product.brand} · ${product.sku}`), element('h3', product.name), priceLabel, source, button);
     return card;
   }));
 }
@@ -191,6 +224,7 @@ byId('quote-form').addEventListener('submit', (event) => {
   status.textContent = 'Sending your quote request…';
 });
 
+byId('results').before(element('p', 'Guide prices are per plain garment in AUD. Your quote confirms sizes, quantities, branding, freight and any applicable GST.'));
 renderCatalogue();
 renderItems();
 
